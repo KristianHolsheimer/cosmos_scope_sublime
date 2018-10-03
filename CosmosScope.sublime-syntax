@@ -1,0 +1,116 @@
+%YAML 1.2
+---
+name: Cosmos Scope
+file_extensions: [script]
+scope: source.script
+
+contexts:
+  # The prototype context is prepended to all contexts but those setting
+  # meta_include_prototype: false.
+  prototype:
+    - include: comments
+
+  main:
+    # The main context is the initial starting point of our syntax.
+    # Include other contexts from here (or specify them directly).
+    - include: functions
+    - include: keywords
+    - include: literals
+    - include: strings
+    - include: types
+    - include: variables
+
+  keywords:
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(VIEW|SELECT DISTINCT|SELECT TOP|SELECT|EXTRACT|FROM|UNION|UNION ALL|ASC|DESC|WHERE|HAVING|TOP|NOT|AND|OR|LEFT JOIN|RIGHT JOIN|INNER JOIN|OUTER JOIN|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|CLUSTERED BY|SORTED BY|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|AS)\b'
+      scope: keyword.other.cosmos-scope
+
+    - match: '\b(MODULE|USING)\b'
+      scope: keyword.control.import
+
+    - match: '(#DECLARE)\s+(\w+)'
+      captures:
+        1: keyword.control.cosmos-scope
+        2: variable.other.constant.cosmos-scope
+
+    - match: '#SET\b'
+      scope: keyword.control.cosmos-scope
+
+    - match: '#(IF|ENDIF|ELSE)\b'
+      scope: keyword.control.conditional.cosmos-scope
+
+    - match: '(==|<=|<|>=|>|!=|!)'
+      scope: keyword.operator.logical.cosmos-scope
+
+  variables:
+    - match: '(\@\@)(\w+)(\@\@)'
+      captures:
+        1: punctuation.definition.variable.cosmos-scope
+        2: variable.other.constant.cosmos-scope
+        3: punctuation.definition.variable.cosmos-scope
+
+    - match: '(\@)(\w+)\b'
+      captures:
+        1: punctuation.definition.variable.cosmos-scope
+        2: variable.other.constant.cosmos-scope
+
+  literals:
+    - match: '0x\d+'
+      scope: constant.numeric.cosmos-scope
+
+    - match: '\b\-?\d+(\.\d+)?(?:[eE]\d{1,3})?'
+      scope: constant.numeric.cosmos-scope
+
+    - match: '\b(?i:TRUE|FALSE)\b'
+      scope: constant.numeric.cosmos-scope
+
+  types:
+    - match: '\b(?i:String|DateTime|int|long|float|double|bool)\b'
+      scope: storage.type.cosmos-scope
+
+  strings:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character.
+    - match: '\@?"'
+      scope: punctuation.definition.string.begin.cosmos-scope
+      push: inside_string
+
+  inside_string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.cosmos-scope
+    - match: '(\\t|\\n|\\r)'
+      scope: constant.character.escape.cosmos-scope
+    - match: '"'
+      scope: punctuation.definition.string.end.cosmos-scope
+      pop: true
+
+  comments:
+    # Comments begin with a '//' and finish at the end of the line.
+    - match: '//'
+      scope: punctuation.definition.comment.cosmos-scope
+      push:
+        # This is an anonymous context push for brevity.
+        - meta_scope: comment.line.cosmos-scope
+        - match: $\n?
+          pop: true
+
+    - match: '/\*'
+      scope: punctuation.definition.comment.cosmos-scope
+      push:
+        - meta_scope: comment.block.cosmos-scope
+        - match: '\*/'
+          pop: true
+
+    - match: '^\[(\S+)\]$'
+      captures:
+        1: entity.name.tag.cosmos-scope
+
+  functions:
+    - match: '(\w+)\('
+      captures:
+        1: variable.function.cosmos-scope
+
