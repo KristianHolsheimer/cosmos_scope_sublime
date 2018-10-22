@@ -2,7 +2,7 @@
 ---
 name: Cosmos Scope
 file_extensions: [script]
-scope: source.script
+scope: source.scope_script
 
 contexts:
   # The prototype context is prepended to all contexts but those setting
@@ -26,7 +26,7 @@ contexts:
     # strings in YAML. When using single quoted strings, only single quotes
     # need to be escaped: this is done by using two single quotes next to each
     # other.
-    - match: '\b(VIEW|SELECT DISTINCT|SELECT TOP|SELECT|EXTRACT|FROM|UNION|UNION ALL|ASC|DESC|WHERE|HAVING|TOP|NOT|AND|OR|LEFT JOIN|RIGHT JOIN|INNER JOIN|OUTER JOIN|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|CLUSTERED BY|SORTED BY|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|AS)\b'
+    - match: '\b(VIEW|SELECT TOP|SELECT|DISTINCT|EXTRACT|FROM|UNION ALL|UNION|WHERE|HAVING|TOP|NOT|AND|OR|IN|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|CLUSTERED BY|SORTED BY|ASC|DESC|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|AS)\b'
       scope: keyword.other.cosmos-scope
 
     - match: '\b(MODULE|USING)\b'
@@ -43,7 +43,7 @@ contexts:
     - match: '#(IF|ENDIF|ELSE)\b'
       scope: keyword.control.conditional.cosmos-scope
 
-    - match: '(==|<=|<|>=|>|!=|!)'
+    - match: '(\=\=|\<\=|\<|\>\=|\>|\!\=|\!|\?\?)'
       scope: keyword.operator.logical.cosmos-scope
 
   variables:
@@ -65,11 +65,11 @@ contexts:
     - match: '\b\-?\d+(\.\d+)?(?:[eE]\d{1,3})?'
       scope: constant.numeric.cosmos-scope
 
-    - match: '\b(?i:TRUE|FALSE)\b'
+    - match: '\b(?i:TRUE|FALSE|NULL)\b'
       scope: constant.numeric.cosmos-scope
 
   types:
-    - match: '\b(?i:String|DateTime|int|long|float|double|bool)\b'
+    - match: '\b(?i:string|datetime|int|long|float|double|bool)\b'
       scope: storage.type.cosmos-scope
 
   strings:
