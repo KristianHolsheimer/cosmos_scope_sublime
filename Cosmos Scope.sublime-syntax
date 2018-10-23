@@ -2,7 +2,7 @@
 ---
 name: Cosmos Scope
 file_extensions: [script]
-scope: source.scope_script
+scope: source.cosmos-scope
 
 contexts:
   # The prototype context is prepended to all contexts but those setting
@@ -75,19 +75,49 @@ contexts:
   strings:
     # Strings begin and end with quotes, and use backslashes as an escape
     # character.
-    - match: '\\"'
-      # escaped quote char: do nothing
-    - match: '\@?"'
+    - match: '\@"'
       scope: punctuation.definition.string.begin.cosmos-scope
-      push: inside_string
+      push: inside_literal_string
+    - match: '\$"'
+      scope: punctuation.definition.string.begin.cosmos-scope
+      push: inside_interpolated_string
+    - match: '"'
+      scope: punctuation.definition.string.begin.cosmos-scope
+      push: inside_normal_string
 
-  inside_string:
+  inside_literal_string:
     - meta_include_prototype: false
     - meta_scope: string.quoted.double.cosmos-scope
-    - match: '(\\t|\\n|\\r)'
+    - match: '"'
+      scope: punctuation.definition.string.end.cosmos-scope
+      pop: true
+
+  inside_interpolated_string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.cosmos-scope
+    - match: '(\\t|\\n|\\r|\\\\)'
       scope: constant.character.escape.cosmos-scope
-    - match: '\\"'
-      # escaped quote char: do nothing
+    - match: '\\"'  # escaped quote char: do nothing
+    - match: '\{'
+      scope: punctuation.definition.placeholder.begin.cosmos-scope
+      push: inside_interpolated_string_brackets
+    - match: '"'
+      scope: punctuation.definition.string.end.cosmos-scope
+      pop: true
+
+  inside_interpolated_string_brackets:
+    - meta_include_prototype: false
+    - meta_scope: constant.other.placeholder.cosmos-scope
+    - match: '\}'
+      scope: punctuation.definition.placeholder.end.cosmos-scope
+      pop: true
+
+  inside_normal_string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.cosmos-scope
+    - match: '(\\t|\\n|\\r|\\\\)'
+      scope: constant.character.escape.cosmos-scope
+    - match: '\\"'  # escaped quote char: do nothing
     - match: '"'
       scope: punctuation.definition.string.end.cosmos-scope
       pop: true
