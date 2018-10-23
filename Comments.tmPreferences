@@ -5,7 +5,7 @@
     <key>name</key>
     <string>Comments</string>
     <key>scope</key>
-    <string>source.scope_script</string>
+    <string>source.cosmos-scope</string>
     <key>settings</key>
     <dict>
         <key>shellVariables</key>
