@@ -29,7 +29,7 @@ contexts:
     - match: '\b(VIEW|SELECT TOP|SELECT|DISTINCT|EXTRACT|FROM|UNION ALL|UNION|WHERE|HAVING|TOP|NOT|AND|OR|IN|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|CLUSTERED BY|SORTED BY|ASC|DESC|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|AS)\b'
       scope: keyword.other.cosmos-scope
 
-    - match: '\b(MODULE|USING)\b'
+    - match: '\b(MODULE|USING|REFERENCE)\b'
       scope: keyword.control.import
 
     - match: '(#DECLARE)\s+(\w+)'
