@@ -75,6 +75,8 @@ contexts:
   strings:
     # Strings begin and end with quotes, and use backslashes as an escape
     # character.
+    - match: '\\"'
+      # escaped quote char: do nothing
     - match: '\@?"'
       scope: punctuation.definition.string.begin.cosmos-scope
       push: inside_string
@@ -84,6 +86,8 @@ contexts:
     - meta_scope: string.quoted.double.cosmos-scope
     - match: '(\\t|\\n|\\r)'
       scope: constant.character.escape.cosmos-scope
+    - match: '\\"'
+      # escaped quote char: do nothing
     - match: '"'
       scope: punctuation.definition.string.end.cosmos-scope
       pop: true
