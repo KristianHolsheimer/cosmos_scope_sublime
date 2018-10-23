@@ -77,7 +77,7 @@ contexts:
     # character.
     - match: '\@"'
       scope: punctuation.definition.string.begin.cosmos-scope
-      push: inside_literal_string
+      push: inside_verbatim_string
     - match: '\$"'
       scope: punctuation.definition.string.begin.cosmos-scope
       push: inside_interpolated_string
@@ -85,9 +85,10 @@ contexts:
       scope: punctuation.definition.string.begin.cosmos-scope
       push: inside_normal_string
 
-  inside_literal_string:
+  inside_verbatim_string:
     - meta_include_prototype: false
     - meta_scope: string.quoted.double.cosmos-scope
+    - match: '""'  # escaped quote char: do nothing
     - match: '"'
       scope: punctuation.definition.string.end.cosmos-scope
       pop: true
