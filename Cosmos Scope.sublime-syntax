@@ -1,7 +1,8 @@
 %YAML 1.2
 ---
 name: Cosmos Scope
-file_extensions: [script]
+file_extensions:
+  - script
 scope: source.cosmos-scope
 
 contexts:
@@ -16,6 +17,8 @@ contexts:
     - include: functions
     - include: keywords
     - include: literals
+    - include: chars
+    - include: csharp
     - include: strings
     - include: types
     - include: variables
@@ -26,7 +29,7 @@ contexts:
     # strings in YAML. When using single quoted strings, only single quotes
     # need to be escaped: this is done by using two single quotes next to each
     # other.
-    - match: '\b(VIEW|SELECT TOP|SELECT|DISTINCT|EXTRACT|FROM|UNION ALL|UNION|WHERE|HAVING|TOP|NOT|AND|OR|IN|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|CLUSTERED BY|SORTED BY|ASC|DESC|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|AS)\b'
+    - match: '\b(VIEW|SELECT TOP|SELECT|DISTINCT|EXTRACT|FROM|UNION ALL|UNION|WHERE|HAVING|TOP|NOT|AND|OR|IN|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|OVER|CROSS|APPLY|CLUSTERED BY|SORTED BY|ASC|DESC|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|SPARSE|STREAMSET|PATTERN|RANGE|COMBINE|AS)\b'
       scope: keyword.other.cosmos-scope
 
     - match: '\b(MODULE|USING|REFERENCE)\b'
@@ -37,7 +40,7 @@ contexts:
         1: keyword.control.cosmos-scope
         2: variable.other.constant.cosmos-scope
 
-    - match: '#SET\b'
+    - match: '^\s*#(SET|ERROR)\b'
       scope: keyword.control.cosmos-scope
 
     - match: '#(IF|ENDIF|ELSE)\b'
@@ -71,6 +74,20 @@ contexts:
   types:
     - match: '\b(?i:string|datetime|int|long|float|double|bool)\b'
       scope: storage.type.cosmos-scope
+
+  chars:
+    # C# chars use single quotes
+    - match: (')([\\]?.)(')
+      captures:
+        # 1: string.quoted.single.begin.cosmos-scope
+        2: string.quoted.single.cosmos-scope
+        # 3: string.quoted.single.end.cosmos-scope
+
+  csharp:
+    - match: '(#CS)'
+      scope: keyword.control.cosmos-scope
+      embed: scope:source.cs
+      escape: '(#ENDCS)'
 
   strings:
     # Strings begin and end with quotes, and use backslashes as an escape
@@ -140,7 +157,7 @@ contexts:
         - match: '\*/'
           pop: true
 
-    - match: '^\[(\S+)\]$'
+    - match: '^\[(\S+)\]\s*$'
       captures:
         1: entity.name.tag.cosmos-scope
 
