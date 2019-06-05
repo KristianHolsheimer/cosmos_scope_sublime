@@ -3,6 +3,9 @@
 name: Cosmos Scope
 file_extensions:
   - script
+  - module
+  - view
+  - tt
 scope: source.cosmos-scope
 
 contexts:
@@ -29,21 +32,21 @@ contexts:
     # strings in YAML. When using single quoted strings, only single quotes
     # need to be escaped: this is done by using two single quotes next to each
     # other.
-    - match: '\b(VIEW|SELECT TOP|SELECT|DISTINCT|EXTRACT|FROM|UNION ALL|UNION|WHERE|HAVING|TOP|NOT|AND|OR|IN|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|OVER|CROSS|APPLY|CLUSTERED BY|SORTED BY|ASC|DESC|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|SPARSE|STREAMSET|PATTERN|RANGE|COMBINE|AS)\b'
+    - match: '\b(VIEW|SELECT TOP|SELECT|DISTINCT|EXTRACT|FROM|UNION ALL|UNION|WHERE|HAVING|TOP|NOT|AND|OR|IN|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP BY|ORDER BY|PARTITION BY|OVER|CROSS|APPLY|CLUSTERED BY|SORTED BY|ASC|DESC|OUTPUT|TO|CONSOLE|SSTREAM|WITH STREAMEXPIRY|SPARSE|STREAMSET|PATTERN|RANGE|COMBINE|AS|PROCESS|REDUCE|PRODUCE)\b'
       scope: keyword.other.cosmos-scope
 
     - match: '\b(MODULE|USING|REFERENCE)\b'
       scope: keyword.control.import
 
-    - match: '(#DECLARE)\s+(\w+)'
+    - match: '(#DECLARE|#SET)\s+(\w+)'
       captures:
         1: keyword.control.cosmos-scope
         2: variable.other.constant.cosmos-scope
 
-    - match: '^\s*#(SET|ERROR)\b'
+    - match: '#(ERROR)\b'
       scope: keyword.control.cosmos-scope
 
-    - match: '#(IF|ENDIF|ELSE)\b'
+    - match: '#(IF|ELSEIF|ELSE|ENDIF)\b'
       scope: keyword.control.conditional.cosmos-scope
 
     - match: '(\=\=|\<\=|\<|\>\=|\>|\!\=|\!|\?\?)'
@@ -157,7 +160,7 @@ contexts:
         - match: '\*/'
           pop: true
 
-    - match: '^\[(\S+)\]\s*$'
+    - match: '^\s*\[(\S+)\]\s*$'
       captures:
         1: entity.name.tag.cosmos-scope
 
