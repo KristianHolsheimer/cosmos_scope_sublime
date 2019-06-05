@@ -23,6 +23,6 @@ $ git clone https://github.com/KristianHolsheimer/cosmos_scope_sublime.git "Cosm
 
 ## Description
 
-The plugin automatically activates Hive syntax highlighting for extensions: `*.script`.
+The plugin automatically activates Cosmos syntax highlighting for extensions: `*.script`, `*.module`, `*.view`, `*.tt`.
  
  *Note: This README was adapted from Guillaume Gardey's [hive-sublime-text](https://github.com/glinmac/hive-sublime-text) project.*
